@@ -62,7 +62,7 @@ internal class PunchingBag : MonoBehaviour {
 
         // Add new punch
         _punches[_punchCount] = new Vector4(pos.x, pos.y, pos.z, radius);
-        _times[_punchCount] = Shader.GetGlobalVector(timeProp).y;
+        _times[_punchCount] = Time.time;
         _punchCount++;
 
         RefreshMaterial();

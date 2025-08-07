@@ -38,6 +38,10 @@ Shader "Custom/Mannequin Limb"
             float _HitDisposeTime;
             int _HitCount;
 
+            // Somehow _Time.y returns not just huge, but also scaled values,
+            // so we use this shenanigan to pass the real time since level load
+            float _ActualTime;
+
             struct appdata {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
@@ -81,7 +85,7 @@ Shader "Custom/Mannequin Limb"
                     float3 hitPos = _HitPositions[j].xyz;
                     float radius = _HitPositions[j].w;
 
-                    float elapsed = _Time.y - _HitTimes[j] - _HitLifetime;
+                    float elapsed = _ActualTime - _HitTimes[j] - _HitLifetime;
                     float t = smoothstep(1, 0, elapsed / _HitDisposeTime);
                     float alpha = clamp(0, 1, t);
 
