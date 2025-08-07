@@ -37,7 +37,7 @@ internal class PunchProcessor : MonoBehaviour {
     // Scaling based on velocity
     [SerializeField] private float _punchMaxMultiplier = 1.2f;
     [SerializeField] private float _punchMinMultiplier = 0.7f;
-    
+
     private readonly List<EarlyPunchResult> _pending = new();
     private float _lastHitTime;
 
@@ -47,7 +47,7 @@ internal class PunchProcessor : MonoBehaviour {
         if (now < _lastHitTime + _punchGap) {
             return;
         }
-        
+
         for (var i = 0; i < _pending.Count; i++) {
             var res = _pending[i];
 
@@ -55,10 +55,10 @@ internal class PunchProcessor : MonoBehaviour {
                 var punch1 = CalculatePunch(result);
                 var punch2 = CalculatePunch(res);
 
-                if (punch1 != null && punch2 != null) {
+                if (punch1 is { intensity: PunchIntensity.Powerful } && punch2 is { intensity: PunchIntensity.Powerful }) {
                     result.puncher.NotifyPunchHandled(punch1.Value);
                     result.puncher.NotifyPunchHandled(punch2.Value);
-                    
+
                     result.bag.RegisterDoublePunch(punch1.Value, punch2.Value);
                     _lastHitTime = now;
                 }
@@ -84,7 +84,7 @@ internal class PunchProcessor : MonoBehaviour {
                 if (punch != null) {
                     result.puncher.NotifyPunchHandled(punch.Value);
                     result.bag.RegisterPunch(punch.Value);
-                    
+
                     _lastHitTime = now;
                 }
 
